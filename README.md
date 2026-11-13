@@ -156,6 +156,40 @@ To launch the **GUI**, type on a separate shell of your on-shore device type (no
 ros2 run ulisse_map ulisse_map_node
 ```
 
+## Save and converting bag files + plot scripts
+
+Source the workspace (`sourceros2`) in each ROS terminal and run the driver/simulator and controller as described above.
+
+**Record a bag** in a separate terminal:
+
+```bash
+mkdir -p ~/logs/bag_recorder
+ros2 bag record -a -s sqlite3 -o ~/logs/bag_recorder/rosbag2_example
+```
+
+Use a new bag name for each recording and press **Ctrl+C** to stop before converting. The current converter requires the `sqlite3` storage format, so keep `-s sqlite3` when recording.
+
+**Convert the bag to CSV data** using the `bags_to_csv` package:
+
+```bash
+ros2 run bags_to_csv offline_bag2csv_node \
+  ~/logs/bag_recorder/rosbag2_example ~/logs/csv
+```
+
+The first argument is the bag directory containing `metadata.yaml`; the second is the output parent directory. Results are saved in `~/logs/csv/rosbag2_example/`, including comma-separated `.txt` files such as `nav_filter.txt`, `gps.txt`, and `reference_vel.txt`.
+
+**Plot in MATLAB:** open [`scripts/matlab`](scripts/matlab) as the current folder (or add it to the MATLAB path), install the dependencies listed in its [README](scripts/matlab/README.md), then run:
+
+```matlab
+csv_dir = fullfile(getenv("HOME"), "logs", "csv", "rosbag2_example") + filesep;
+data = import_data(csv_dir, false);
+plot_data(data, false);
+```
+
+Point `csv_dir` to the converted data directory and keep its trailing separator. This example plots the recorded data without simulation ground-truth overlays.
+
+The current `import_data.m` expects the legacy IMU/compass/magnetometer columns in `sensors.txt`. Newer recordings exported with separate `imu_raw.csv`, `imu_mag.csv`, and `imu_pose.csv` files require an importer update before using these plots.
+
 ## GPS Setup
 To enable the GPS on a fresh install of Linux you will have to:
 
