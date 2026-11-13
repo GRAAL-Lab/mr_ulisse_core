@@ -1,0 +1,32 @@
+Sea State 1 - 2 Simulator Parameters
+====================================
+
+Assumptions used:
+1. wz is vertical displacement: z(t) = C + A sin(2 pi f t), so wave height is about 2A.
+2. wx and wy are angular rates (rad/s), and to avoid drift their C should stay 0.
+
+Sea State 1 (calm rippled, 0 to 0.1 m)
+- Target representative wave height: about 0.06 m
+- So wz.A = 0.03 m, wz.C = 0.0 m
+- Short, light ripple frequency: f = 0.35 Hz
+- Small roll/pitch motion: wx.A = 0.015 rad/s, wy.A = 0.012 rad/s, C = 0
+
+Parameters:
+- wx: C 0.0, A 0.015, f 0.35
+- wy: C 0.0, A 0.012, f 0.35
+- wz: C 0.0, A 0.03, f 0.35
+
+Sea State 2 (smooth wavelets, 0.1 to 0.5 m)
+- Target representative wave height: about 0.30 m
+- So wz.A = 0.15 m, wz.C = 0.0 m
+- Slightly longer wave period: f = 0.25 Hz
+- Moderate roll/pitch motion: wx.A = 0.055 rad/s, wy.A = 0.045 rad/s, C = 0
+
+Parameters:
+- wx: C 0.0, A 0.055, f 0.25
+- wy: C 0.0, A 0.045, f 0.25
+- wz: C 0.0, A 0.15, f 0.25
+
+Important note:
+- Keep wx.C and wy.C at 0. Nonzero C means constant angular-rate bias, which can cause continuous rotation and destabilize estimation.
+- If motion is still too aggressive, first reduce wx.A and wy.A by 30 to 50 percent before touching wz.

@@ -1,0 +1,230 @@
+import QtQuick 2.6
+import QtQuick.Window 2.0
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.1
+import QtLocation 5.6
+import QtPositioning 5.6
+import Qt.labs.settings 1.0
+import QtQuick.Dialogs 1.3
+import QtQuick.Controls.Material 2.1
+import QtQuick.Controls.Universal 2.1
+import QtQuick.Controls.Styles 1.4
+import Qt.labs.platform 1.1
+import "./qml"
+
+ApplicationWindow {
+    id: window
+    minimumWidth: 1200
+    minimumHeight: 800
+    visible: true
+
+    property color blue: Material.color(Material.Blue, Material.Shade700)
+    property color orange: Material.color(Material.Amber, Material.Shade700)
+    property color softorange: Material.color(Material.DeepOrange, Material.Shade500)
+    //property color softorangelight: Material.color(Material.DeepOrange, Material.Shade100)
+    property color red: Material.color(Material.Red, Material.Shade700)
+    property color lightred: Material.color(Material.Red, Material.Shade500)
+    property color green: Material.color(Material.Green, Material.Shade700)
+    property color lightgreen: Material.color(Material.Green, Material.Shade500)
+    property color cyan: Material.color(Material.Cyan, Material.Shade700)
+    property color lightcyan: Material.color(Material.Cyan, Material.Shade500)
+    property color darkgrey: Material.color(Material.Grey, Material.Shade800)
+    property color grey: Material.color(Material.Grey, Material.Shade700)
+    property color lightgrey: Material.color(Material.Grey, Material.Shade400)
+    property color lightergrey: Material.color(Material.Grey, Material.Shade300)
+    property color dimmedwhite: Material.color(Material.Grey, Material.Shade100)
+    property color lighterbluegrey: Material.color(Material.BlueGrey, Material.Shade50)
+    property color lightbluegrey: Material.color(Material.BlueGrey, Material.Shade100)
+
+    property color mainColor: cyan
+    property color mainColorLight: lightcyan
+
+    property string futureMapPlugin: ""
+
+    property alias mapViewItem: mapViewLoader.item
+
+    signal mapPluginReady
+    signal sig_escape
+
+    Material.theme: settings.theme
+    Material.accent: mainColor
+
+    onClosing: {
+        // This onClosing function is needed since the map
+        // plugin cannot be changed 'live', so we will register
+        // the new setting only when closing the app
+        settings.mapPluginType = futureMapPlugin
+    }
+
+    Shortcut {
+        // Halting catamaran when Return is pressed
+        sequence: "Return"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            toast.show("Sent Halt Command")
+            cmdWrapper.sendHaltCommand()
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+R"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            reloadROSTopics()
+        }
+    }
+
+    Shortcut {
+        sequence: StandardKey.Cancel  // Escape Key
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            sig_escape()
+        }
+    }
+
+
+    Settings {
+        id: settings
+        property int shTimeout: 120
+        property string mapPluginType: "mapboxgl"
+        property string mapCachePath: home_dir + "/.map_offline_tiles/" + mapPluginType + "/"
+        property int mapTypeIndex: 0
+        property string theme: "Light"
+        property real mapBearing: 0.0
+        property real mapZoom: 19.0
+        property var mapCenter: QtPositioning.coordinate(44.392, 8.945)
+        property string savedBoundary: "null"
+        property bool showCentroid: true
+        property bool showStatusOverlay: true
+        property bool showMouseCoordinates: true
+        property bool showObstacleID: true
+        property bool showPolylineID: true
+        property string bagSaveFolder: home_dir + "/logs/"
+        property int visualizerTimeout: 30
+        property int pathLineWidth: 2
+        property int ulisseLineWidth: 1
+        property bool showUlisseTrace: true
+        property bool showAuxiliaryTrace: false
+        property bool loopPaths: false
+
+        property bool bypassSafetyBoundaryCheck: false
+
+        Component.onCompleted: {
+            futureMapPlugin = mapPluginType
+            mapViewLoader.active = true
+        }
+    }
+
+    ToastManager {
+        // The object that makes appear temporary messages on the window
+        id: toast
+        objectName: "toastManager"
+    }
+
+    SettingsDialog {
+        id: settingsDialog
+        x: Math.round((window.width - width) / 2)
+        y: Math.round(window.height / 32)
+        width: Math.round(window.width * 0.6)
+        height: Math.round(window.height * 0.8)
+    }
+
+    onMapPluginReady: {
+        console.log("onMapPluginReady")
+        settingsDialog.updateMapOtions()
+    }
+
+    HelpDialog {
+        id: helpDialog
+        x: Math.round((window.width - width) / 2)
+        y: Math.round((window.height - height) / 2) - headerBar.height
+        width: Math.round(window.width * 0.8)
+        height: Math.round(window.height * 0.8)
+    }
+
+    CustomFileDialog {
+        id: browseCacheDirDialog
+        title: "Please choose a folder"
+        folder: "file://" + Qt.resolvedUrl("~")
+        selectFolder: true
+
+        onAccepted: {
+            var path = browseCacheDirDialog.fileUrl.toString()
+            // remove prefixed "file://"
+            path = path.replace(/^(file:\/{2})/, "")
+            // unescape html codes like '%23' for '#'
+            var cleanPath = decodeURIComponent(path)
+            settingsDialog.mapCacheDirText = cleanPath
+        }
+    }
+
+    //// UI part ////
+    header: CustomHeader {
+        id: headerBar
+    }
+
+    Item {
+        // This Item is needed to add margins to the StackLayout and make it correctly resize
+        id: stackViewContainer
+        anchors.fill: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: window.height - headerBar.height
+        width: window.width
+
+        Component {
+            // This Component is needed to load the map in an asynchronous way,
+            // using the Loader class.
+            id: mapViewComponent
+            MapView {
+                id: mapView
+                anchors.fill: parent
+            }
+        }
+
+        StackLayout {
+            id: mainStackView
+            //height: parent.height
+            anchors.fill: parent
+            currentIndex: headerBar.tabBarIndex
+            Layout.alignment: Qt.AlignHCenter
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            Loader {
+                // This loader is needed to dynamically load the map plugin
+                // only once the settings are loaded (so to be able to
+                // correctly read 'mapPluginType' and 'mapCachePath').
+                id: mapViewLoader
+                sourceComponent: mapViewComponent
+                active: false
+                Layout.fillWidth: true
+
+            }
+
+            StatusDataView {
+                id: statusDataView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+
+            ActionView {
+                id: taskDataView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+
+            UtilitiesView {
+                id: utilitiesView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+        }
+    }
+
+    function reloadROSTopics() {
+        cmdWrapper.resetPublishersAndSubscribers()
+        fbkUpdater.resetPublishersAndSubscribers()
+        taskdataUpdater.resetPublishersAndSubscribers()
+        toast.show("Reloading ROS Topics", 2000)
+    }
+}

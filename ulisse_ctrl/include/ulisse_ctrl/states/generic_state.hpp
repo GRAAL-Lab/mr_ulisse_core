@@ -1,0 +1,40 @@
+#ifndef ULISSE_CTRL_GENERIC_STATE_HPP
+#define ULISSE_CTRL_GENERIC_STATE_HPP
+
+#include "ulisse_ctrl/ctrl_data_structs.hpp"
+#include <fsm/fsm.h>
+#include <ikcl/ikcl.h>
+#include <libconfig.h++>
+
+//to be delete once safetyB in ikcl
+#include "ulisse_ctrl/tasks/SafetyBoundaries.hpp"
+
+namespace ulisse {
+
+namespace states {
+
+    class GenericState : public fsm::BaseState {
+    protected:
+        std::shared_ptr<ikcl::SafetyBoundaries> safetyBoundariesTask_;
+        std::shared_ptr<ikcl::AbsoluteAxisAlignment> absoluteAxisAlignmentSafetyTask_;
+
+        double minHeadingError_, maxHeadingError_;
+
+    public:
+        std::shared_ptr<ControlData> ctrlData; // [x y]
+        std::shared_ptr<tpik::ActionManager> actionManager;
+        std::shared_ptr<rml::RobotModel> robotModel;
+        std::unordered_map<std::string, TasksInfo> tasksMap;
+        std::shared_ptr<LatLong> real_position; // ILOS
+        std::shared_ptr<ControlData> ctrlDataReal; // ILOS
+
+        GenericState();
+        virtual ~GenericState(void);
+
+        void CheckRadioController();
+        virtual bool ConfigureStateFromFile(libconfig::Config& confObj) = 0;
+    };
+}
+}
+
+#endif // ULISSE_CTRL_GENERIC_STATE_HPP
