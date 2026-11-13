@@ -1,5 +1,7 @@
 #include "ulisse_ctrl/commands/command_halt.hpp"
 
+#include "ulisse_ctrl/states/state_halt.hpp"
+
 namespace ulisse {
 
 namespace commands {

@@ -2,9 +2,12 @@
 #define ULISSE_CTRL_COMMANDHALT_HPP
 
 #include "ulisse_ctrl/commands/generic_command.hpp"
-#include "ulisse_ctrl/states/state_halt.hpp"
 
 namespace ulisse {
+
+namespace states {
+class StateHalt;
+}
 
 namespace commands {
 

@@ -6,6 +6,8 @@
  */
 
 #include "ulisse_ctrl/events/event_near_goal_position.hpp"
+#include "ulisse_ctrl/control_data.hpp"
+#include "ulisse_ctrl/states/state_hold.hpp"
 
 namespace ulisse {
 

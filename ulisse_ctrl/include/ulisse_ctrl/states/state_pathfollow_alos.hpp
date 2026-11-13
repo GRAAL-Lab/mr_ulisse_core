@@ -6,6 +6,11 @@
 #include "ulisse_msgs/msg/path_data.hpp"
 #include <ulisse_ctrl/path_manager_alos.hpp>
 
+namespace ikcl {
+class AlignToTarget;
+class CartesianDistance;
+}
+
 namespace ulisse {
 
 namespace states {

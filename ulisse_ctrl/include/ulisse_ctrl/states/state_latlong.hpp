@@ -4,6 +4,11 @@
 #include "ulisse_ctrl/states/generic_state.hpp"
 //#include "ulisse_ctrl/states/state_hold.hpp"
 
+namespace ikcl {
+class AlignToTarget;
+class CartesianDistance;
+}
+
 namespace ulisse {
 
 namespace states {
@@ -20,7 +25,7 @@ namespace states {
         fsm::retval OnEntry() override;
         fsm::retval Execute() override;
 
-        LatLong goalPosition;
+        ctb::LatLong goalPosition;
         double goalHeading;
         double goalDistance;
         double acceptanceRadius;

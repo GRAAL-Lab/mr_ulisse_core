@@ -1,4 +1,6 @@
 #include "ulisse_ctrl/commands/command_pathfollow_current.hpp"
+
+#include "ulisse_ctrl/states/state_pathfollow_current.hpp"
 #include "ulisse_ctrl/ulisse_defines.hpp"
 
 namespace ulisse {

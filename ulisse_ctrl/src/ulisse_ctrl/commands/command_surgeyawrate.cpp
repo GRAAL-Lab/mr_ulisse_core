@@ -1,5 +1,7 @@
 #include "ulisse_ctrl/commands/command_surgeyawrate.hpp"
 
+#include "ulisse_ctrl/states/state_surgeyawrate.hpp"
+
 namespace ulisse {
 
 namespace commands {

@@ -1,5 +1,9 @@
 #include <libconfig.h++>
 #include "ulisse_ctrl/configuration.hpp"
+#include "ulisse_ctrl/states/generic_state.hpp"
+#include <ctrl_toolbox/HelperFunctions.h>
+#include <tpik/ActionManager.h>
+#include <tpik/Task.h>
 #include "ulisse_ctrl/ulisse_defines.hpp"
 
 bool ConfigureTasksFromFile(std::unordered_map<std::string, ulisse::TasksInfo>& tasksMap, libconfig::Config& confObj)

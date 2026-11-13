@@ -2,9 +2,16 @@
 #define ULISSE_CTRL_COMMANDMOVE_HPP
 
 #include "ulisse_ctrl/commands/generic_command.hpp"
-#include "ulisse_ctrl/states/state_latlong.hpp"
+
+namespace ctb {
+struct LatLong;
+}
 
 namespace ulisse {
+
+namespace states {
+class StateLatLong;
+}
 
 namespace commands {
 
@@ -17,7 +24,7 @@ namespace commands {
         CommandLatLong();
         virtual ~CommandLatLong() override;
         virtual fsm::retval Execute(void) override;
-        bool SetGoTo(LatLong goalPosition, double acceptanceRadius);
+        bool SetGoTo(ctb::LatLong goalPosition, double acceptanceRadius);
 
         void SetState(std::shared_ptr<states::GenericState> state) override;
     };

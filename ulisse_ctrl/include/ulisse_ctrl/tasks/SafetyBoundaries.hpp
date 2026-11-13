@@ -2,13 +2,17 @@
 #define __CONTROLSAFETYBOUNDARIES_H__
 
 #include "tpik/TPIKDefines.h"
-#include "ulisse_ctrl/ctrl_data_structs.hpp"
+#include <ctrl_toolbox/DataStructs.h>
 #include "ulisse_msgs/msg/coordinate_list.hpp"
-#include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
+#include <boost/geometry/geometries/segment.hpp>
 #include <tpik/TPIKlib.h>
-
-using namespace ctb;
+#include <iomanip>
+#include <list>
+#include <memory>
+#include <ostream>
+#include <string>
 
 namespace ikcl {
 
@@ -87,7 +91,7 @@ public:
         return os;
     }
 
-    auto VehiclePosition() -> LatLong& { return vehiclePositionLatLong_; }
+    auto VehiclePosition() -> ctb::LatLong& { return vehiclePositionLatLong_; }
 
     Eigen::Vector3d GetAlignVector(const std::string& frameID);
 
@@ -117,7 +121,7 @@ protected:
     polygon_t poly_;
     Eigen::Vector3d bodyF_alignVector_;
     Eigen::Vector3d vehiclePosition_;
-    LatLong vehiclePositionLatLong_;
+    ctb::LatLong vehiclePositionLatLong_;
     double d_;
 };
 } // namespace ikcl

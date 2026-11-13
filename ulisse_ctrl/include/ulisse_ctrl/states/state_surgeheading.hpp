@@ -3,6 +3,10 @@
 
 #include "ulisse_ctrl/states/generic_state.hpp"
 
+namespace ikcl {
+class LinearVelocity;
+}
+
 namespace ulisse {
 
 namespace states {

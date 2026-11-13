@@ -2,9 +2,12 @@
 #define ULISSE_CTRL_COMMANDSURGEHEADING_HPP
 
 #include "ulisse_ctrl/commands/generic_command.hpp"
-#include "ulisse_ctrl/states/state_surgeheading.hpp"
 
 namespace ulisse {
+
+namespace states {
+class StateSurgeHeading;
+}
 
 namespace commands {
 

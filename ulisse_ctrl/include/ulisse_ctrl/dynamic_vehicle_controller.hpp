@@ -17,7 +17,8 @@
 
 #include "ctrl_toolbox/HelperFunctions.h"
 
-#include "ulisse_ctrl/ctrl_data_structs.hpp"
+#include "ulisse_ctrl/controller_configuration.hpp"
+#include <ctrl_toolbox/pid/DigitalPID.h>
 #include "ulisse_ctrl/ulisse_defines.hpp"
 
 #include "surface_vehicle_model/surfacevehiclemodel.hpp"

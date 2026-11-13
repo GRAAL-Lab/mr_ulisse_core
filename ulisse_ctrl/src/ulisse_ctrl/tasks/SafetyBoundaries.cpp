@@ -1,5 +1,16 @@
 #include "ulisse_ctrl/tasks/SafetyBoundaries.hpp"
 
+#include <boost/geometry/algorithms/centroid.hpp>
+#include <boost/geometry/algorithms/covered_by.hpp>
+#include <boost/geometry/algorithms/distance.hpp>
+#include <boost/geometry/algorithms/intersection.hpp>
+#include <boost/geometry/arithmetic/dot_product.hpp>
+#include <boost/geometry/io/wkt/read.hpp>
+#include <boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp>
+#include <boost/geometry/strategies/cartesian/distance_projected_point.hpp>
+#include <boost/lexical_cast.hpp>
+#include <ctrl_toolbox/HelperFunctions.h>
+
 using namespace ctb;
 namespace ikcl {
 

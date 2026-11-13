@@ -87,12 +87,12 @@ file(GLOB_RECURSE ALL_FILES
 )
 add_custom_target(.Files. SOURCES ${ALL_FILES})
 
-file(GLOB SOURCE_FILES
-        "src/*.cpp"
-        "include/ulisse_map/*.hpp"
-)
-
+# Keep each QObject header with its implementation so AUTOMOC runs once.
 add_library(ulissemap_lib
+    include/ulisse_map/feedbackupdater.hpp
+    include/ulisse_map/taskdataupdater.hpp
+    include/ulisse_map/commandwrapper.hpp
+    include/ulisse_map/addonsbridge.hpp
     src/feedbackupdater.cpp
     src/taskdataupdater.cpp
     src/commandwrapper.cpp
@@ -107,15 +107,7 @@ if(ENABLE_UNITY_BUILD)
   )
 endif()
 
-target_link_libraries(ulissemap_lib
-  rclcpp::rclcpp
-  ament_index_cpp::ament_index_cpp
-)
-
-# The header files must be included in the add_executable directive
-# otherwise QT automoc won't parse the files and you'll get
-# "undefined reference to vtable"
-add_executable(${PROJECT_NAME}_node ${SOURCE_FILES} "src/qml.qrc" )
+add_executable(${PROJECT_NAME}_node src/main.cpp src/qml.qrc)
 
 # Enable unity builds for faster compilation (Qt projects benefit especially, if ENABLE_UNITY_BUILD is ON)
 if(ENABLE_UNITY_BUILD)
@@ -133,14 +125,13 @@ endif()
 #        rmw_implementation
 #        nav_filter
 #)
-target_link_libraries(${PROJECT_NAME}_node
+target_link_libraries(ulissemap_lib PUBLIC
         Qt5::Core
         Qt5::Widgets
         Qt5::Quick
         Qt5::Location
         Qt5::Positioning
         Qt5::QuickControls2
-        ulissemap_lib
         rclcpp::rclcpp
         ament_index_cpp::ament_index_cpp
         ${nav_filter_TARGETS}
@@ -154,6 +145,8 @@ target_link_libraries(${PROJECT_NAME}_node
         sisl_toolbox
         rml
 )
+
+target_link_libraries(${PROJECT_NAME}_node PRIVATE ulissemap_lib)
 
 #ament_export_include_directories(include)
 

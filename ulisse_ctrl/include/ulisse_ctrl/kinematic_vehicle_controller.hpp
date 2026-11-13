@@ -37,20 +37,45 @@
 #include "ulisse_ctrl/events/event_near_goal_position.hpp"
 #include "ulisse_ctrl/events/event_rc_enabled.hpp"
 
-#include "ulisse_ctrl/states/state_halt.hpp"
-#include "ulisse_ctrl/states/state_hold.hpp"
-#include "ulisse_ctrl/states/state_latlong.hpp"
-#include "ulisse_ctrl/states/state_pathfollow.hpp"
-#include "ulisse_ctrl/states/state_pathfollow_ilos.hpp"
-#include "ulisse_ctrl/states/state_pathfollow_current.hpp"
-#include "ulisse_ctrl/states/state_pathfollow_iloscurrent.hpp"
-#include "ulisse_ctrl/states/state_pathfollow_alos.hpp"
-#include "ulisse_ctrl/states/state_surgeheading.hpp"
-#include "ulisse_ctrl/states/state_surgeyawrate.hpp"
 
-#include "ulisse_ctrl/tasks/SafetyBoundaries.hpp"
+#include "ulisse_ctrl/control_data.hpp"
+#include "ulisse_ctrl/task_info.hpp"
+#include <chrono>
+#include <memory>
+#include <string>
+#include <unordered_map>
+
+namespace ikcl {
+class AbsoluteAxisAlignment;
+class AlignToTarget;
+class CartesianDistance;
+class LinearVelocity;
+class SafetyBoundaries;
+}
+
+namespace tpik {
+class ActionManager;
+class iCAT;
+class Solver;
+}
 
 namespace ulisse {
+
+struct KCLConfiguration;
+
+namespace states {
+class StateHalt;
+class StateHold;
+class StateLatLong;
+class StatePathFollow;
+class StatePathFollowALOS;
+class StatePathFollowCurrent;
+class StatePathFollowILOS;
+class StatePathFollowILOSCurrent;
+class StateSurgeHeading;
+class StateSurgeYawRate;
+}
+
 
 class VehicleController : public rclcpp::Node {
 
@@ -166,7 +191,7 @@ class VehicleController : public rclcpp::Node {
     //std::shared_ptr<ctb::LatLong> vehiclePosition_;
     //std::shared_ptr<Eigen::Vector2d> inertialF_waterCurrent_;
     ulisse_msgs::msg::SimulatedSystem simulatedData_; // ILOS
-    std::shared_ptr<LatLong> real_position_; // ILOS
+    std::shared_ptr<ctb::LatLong> real_position_; // ILOS
     std::shared_ptr<ControlData> ctrlDataReal_;
 
     bool LoadConfiguration(std::shared_ptr<KCLConfiguration>& conf);

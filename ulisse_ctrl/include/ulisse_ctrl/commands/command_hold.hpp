@@ -2,10 +2,16 @@
 #define ULISSE_CTRL_COMMANDHOLD_HPP
 
 #include "ulisse_ctrl/commands/generic_command.hpp"
-#include "ulisse_ctrl/states/state_hold.hpp"
-#include "ulisse_ctrl/states/state_latlong.hpp"
+
+namespace ctb {
+struct LatLong;
+}
 
 namespace ulisse {
+
+namespace states {
+class StateHold;
+}
 
 namespace commands {
 
@@ -22,7 +28,7 @@ namespace commands {
 
         //void SetWaterCurrent(const std::shared_ptr<Eigen::Vector2d>& inertialF_waterCurrent);
 
-        void SetPositionToHold(const LatLong& p);
+        void SetPositionToHold(const ctb::LatLong& p);
     };
 }
 }

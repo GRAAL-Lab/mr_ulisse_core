@@ -1,4 +1,6 @@
 #include "ulisse_ctrl/commands/command_surgeheading.hpp"
+
+#include "ulisse_ctrl/states/state_surgeheading.hpp"
 #include "ulisse_ctrl/ulisse_defines.hpp"
 
 namespace ulisse {

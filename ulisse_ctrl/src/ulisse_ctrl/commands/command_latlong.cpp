@@ -1,4 +1,6 @@
 #include "ulisse_ctrl/commands/command_latlong.hpp"
+
+#include "ulisse_ctrl/states/state_latlong.hpp"
 #include "ulisse_ctrl/ulisse_defines.hpp"
 
 namespace ulisse {
@@ -14,7 +16,7 @@ namespace commands {
         return fsm_->SetNextState(ulisse::states::ID::latlong);
     }
 
-    bool CommandLatLong::SetGoTo(LatLong goalPosition, double acceptanceRadius)
+    bool CommandLatLong::SetGoTo(ctb::LatLong goalPosition, double acceptanceRadius)
     {
         if (std::isnan(goalPosition.latitude) ||
             std::isnan(goalPosition.longitude) ||

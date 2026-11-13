@@ -114,6 +114,18 @@ set(ulisse_dynamic_ctrl_lib_sources
 )
 
 ## Libraries
+# Compile shared configuration implementations once for both controllers.
+add_library(ulisse_controller_configuration STATIC
+  src/ulisse_ctrl/controller_configuration.cpp
+)
+set_target_properties(ulisse_controller_configuration PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(ulisse_controller_configuration PUBLIC
+  ${surface_vehicle_model_TARGETS}
+  ctrl_toolbox
+  config++
+  rml
+)
+
 add_library(ulisse_kinematic_ctrl_lib ${ulisse_kinematic_ctrl_lib_sources})
 #ament_target_dependencies(ulisse_kinematic_ctrl_lib rclcpp std_msgs ulisse_msgs surface_vehicle_model ament_index_cpp)
 #target_link_libraries(ulisse_kinematic_ctrl_lib ${surface_vehicle_model_LIBRARIES} ${ulisse_msgs_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES} ikcl tpik config++ GeographicLib rml fsm ctrl_toolbox sisl_toolbox)
@@ -127,6 +139,7 @@ if(ENABLE_UNITY_BUILD)
 endif()
 
 target_link_libraries(ulisse_kinematic_ctrl_lib PUBLIC
+  ulisse_controller_configuration
   ${std_msgs_TARGETS}
   ${ulisse_msgs_TARGETS}
   ${surface_vehicle_model_TARGETS}
@@ -147,6 +160,7 @@ target_link_libraries(ulisse_kinematic_ctrl_lib PUBLIC
 
 add_library(ulisse_dynamic_ctrl_lib ${ulisse_dynamic_ctrl_lib_sources})
 target_link_libraries(ulisse_dynamic_ctrl_lib PUBLIC
+  ulisse_controller_configuration
   ${std_msgs_TARGETS}
   ${ulisse_msgs_TARGETS}
   ${surface_vehicle_model_TARGETS}

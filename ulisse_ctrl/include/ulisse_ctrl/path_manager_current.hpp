@@ -1,7 +1,10 @@
 #ifndef PATHMANAGERCURRENT_H
 #define PATHMANAGERCURRENT_H
 
-#include "ctrl_data_structs.hpp"
+#include <ctrl_toolbox/HelperFunctions.h>
+#include <chrono>
+#include <string>
+#include <vector>
 
 #include "ulisse_msgs/msg/path_data.hpp"
 #include "sisl_toolbox/sisl_toolbox.hpp"

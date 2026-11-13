@@ -80,6 +80,15 @@ sourceros2
 colcon build --symlink-install
 ```
 
+### Conservative Build (in case of limited resources)
+
+```bash
+MAKEFLAGS="-j1" CMAKE_BUILD_PARALLEL_LEVEL=1 \
+  colcon build --symlink-install \
+    --executor sequential \
+    --cmake-args -DENABLE_UNITY_BUILD=OFF
+```
+
 ### Faster Builds on Embedded Systems
 
 For initial builds on the catamaran PC, enable unity builds (30-40% faster, uses more RAM):
@@ -93,6 +102,7 @@ For incremental development, disable unity:
 ```bash
 colcon build --symlink-install
 ```
+
 
 ## Run the architecture
 

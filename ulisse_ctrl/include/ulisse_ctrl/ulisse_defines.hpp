@@ -3,6 +3,7 @@
 
 /*#include <rml/RMLDefines.h>
 #include <vector>*/
+#include <cstdint>
 #include <string>
 
 namespace ulisse {

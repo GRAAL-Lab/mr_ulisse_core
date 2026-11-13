@@ -1,4 +1,6 @@
 #include "ulisse_ctrl/states/state_surgeyawrate.hpp"
+
+#include <tpik/ActionManager.h>
 #include "ulisse_ctrl/ulisse_defines.hpp"
 
 namespace ulisse {

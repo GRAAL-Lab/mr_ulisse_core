@@ -6,6 +6,12 @@
 #include "ulisse_msgs/msg/path_data.hpp"
 #include <ulisse_ctrl/path_manager_current.hpp>
 
+namespace ikcl {
+class AlignToTarget;
+class CartesianDistance;
+class LinearVelocity;
+}
+
 namespace ulisse {
 
 namespace states {

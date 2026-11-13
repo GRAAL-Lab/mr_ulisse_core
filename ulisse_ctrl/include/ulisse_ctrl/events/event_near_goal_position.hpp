@@ -9,9 +9,14 @@
 #define EVENT_NEAR_GOAL_RPOSITION_H_
 
 #include "fsm/fsm.h"
-#include "ulisse_ctrl/states/state_hold.hpp"
+#include <memory>
 
 namespace ulisse {
+
+struct ControlData;
+namespace states {
+class StateHold;
+}
 
 namespace events {
 

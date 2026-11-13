@@ -1,13 +1,23 @@
 #ifndef ULISSE_CTRL_GENERIC_STATE_HPP
 #define ULISSE_CTRL_GENERIC_STATE_HPP
 
-#include "ulisse_ctrl/ctrl_data_structs.hpp"
+#include "ulisse_ctrl/control_data.hpp"
+#include "ulisse_ctrl/task_info.hpp"
 #include <fsm/fsm.h>
-#include <ikcl/ikcl.h>
 #include <libconfig.h++>
 
-//to be delete once safetyB in ikcl
-#include "ulisse_ctrl/tasks/SafetyBoundaries.hpp"
+#include <memory>
+#include <string>
+#include <unordered_map>
+
+namespace ikcl {
+class SafetyBoundaries;
+class AbsoluteAxisAlignment;
+}
+
+namespace tpik {
+class ActionManager;
+}
 
 namespace ulisse {
 
@@ -25,7 +35,7 @@ namespace states {
         std::shared_ptr<tpik::ActionManager> actionManager;
         std::shared_ptr<rml::RobotModel> robotModel;
         std::unordered_map<std::string, TasksInfo> tasksMap;
-        std::shared_ptr<LatLong> real_position; // ILOS
+        std::shared_ptr<ctb::LatLong> real_position; // ILOS
         std::shared_ptr<ControlData> ctrlDataReal; // ILOS
 
         GenericState();

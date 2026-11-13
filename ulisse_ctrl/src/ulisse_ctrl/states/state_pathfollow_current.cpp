@@ -1,4 +1,9 @@
 #include "ulisse_ctrl/states/state_pathfollow_current.hpp"
+
+#include <ctrl_toolbox/HelperFunctions.h>
+#include <tpik/ActionManager.h>
+#include "ulisse_ctrl/detail/ikcl_tasks.hpp"
+#include "ulisse_ctrl/tasks/SafetyBoundaries.hpp"
 #include "ulisse_ctrl/ulisse_defines.hpp"
 
 namespace ulisse {

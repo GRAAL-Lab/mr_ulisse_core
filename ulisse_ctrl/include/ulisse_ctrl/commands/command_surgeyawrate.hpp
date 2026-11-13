@@ -2,9 +2,12 @@
 #define ULISSE_CTRL_COMMANDSURGEYAWRATE_HPP
 
 #include "ulisse_ctrl/commands/generic_command.hpp"
-#include "ulisse_ctrl/states/state_surgeyawrate.hpp"
 
 namespace ulisse {
+
+namespace states {
+class StateSurgeYawRate;
+}
 
 namespace commands {
 

@@ -1,5 +1,22 @@
 #include "ulisse_ctrl/kinematic_vehicle_controller.hpp"
 
+#include "ulisse_ctrl/controller_configuration.hpp"
+#include "ulisse_ctrl/tasks/SafetyBoundaries.hpp"
+#include "ulisse_ctrl/detail/ikcl_tasks.hpp"
+#include <tpik/ActionManager.h>
+#include <tpik/Solver.h>
+#include <tpik/iCAT.h>
+#include "ulisse_ctrl/states/state_halt.hpp"
+#include "ulisse_ctrl/states/state_hold.hpp"
+#include "ulisse_ctrl/states/state_latlong.hpp"
+#include "ulisse_ctrl/states/state_pathfollow.hpp"
+#include "ulisse_ctrl/states/state_pathfollow_ilos.hpp"
+#include "ulisse_ctrl/states/state_pathfollow_current.hpp"
+#include "ulisse_ctrl/states/state_pathfollow_iloscurrent.hpp"
+#include "ulisse_ctrl/states/state_pathfollow_alos.hpp"
+#include "ulisse_ctrl/states/state_surgeheading.hpp"
+#include "ulisse_ctrl/states/state_surgeyawrate.hpp"
+
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <jsoncpp/json/json.h>
 
@@ -24,7 +41,7 @@ VehicleController::VehicleController(std::string conf_filename)
 
     ctrlData_ = std::make_shared<ControlData>();
     //ctrlDataReal_ = std::make_shared<ControlData>(); // no need for now
-    real_position_ = std::make_shared<LatLong>();
+    real_position_ = std::make_shared<ctb::LatLong>();
 
     fileName_ = conf_filename;
 
@@ -462,7 +479,7 @@ void VehicleController::CommandsHandler(const std::shared_ptr<rmw_request_id_t> 
         } else if (request->command_type == ulisse::commands::ID::latlong) {
 
             std::cout << "Received Command LatLong" << std::endl;
-            if(!commandLatLong_.SetGoTo(LatLong(request->latlong_cmd.goal.latitude, request->latlong_cmd.goal.longitude),
+            if(!commandLatLong_.SetGoTo(ctb::LatLong(request->latlong_cmd.goal.latitude, request->latlong_cmd.goal.longitude),
                     request->latlong_cmd.acceptance_radius)){
                 response->res = "CommandAnswer::fail - Malformed LatLong Message.";
                 ret = fsm::retval::fail;

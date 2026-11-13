@@ -1,4 +1,7 @@
 #include "ulisse_ctrl/commands/command_hold.hpp"
+
+#include "ulisse_ctrl/states/state_hold.hpp"
+#include "ulisse_ctrl/states/state_latlong.hpp"
 #include "ulisse_ctrl/ulisse_defines.hpp"
 
 namespace ulisse {
@@ -24,7 +27,7 @@ namespace commands {
         stateHold_->inertialF_waterCurrent = inertialF_waterCurrent;
     }*/
 
-    void CommandHold::SetPositionToHold(const LatLong& p)
+    void CommandHold::SetPositionToHold(const ctb::LatLong& p)
     {
         stateHold_->positionToHold = p;
     }

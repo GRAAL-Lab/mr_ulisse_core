@@ -1,9 +1,20 @@
 #ifndef ULISSE_CONFIGURATION_H
 #define ULISSE_CONFIGURATION_H
 
-#include <ikcl/ikcl.h>
-#include <ulisse_ctrl/ctrl_data_structs.hpp>
-#include <ulisse_ctrl/states/generic_state.hpp>
+#include "ulisse_ctrl/task_info.hpp"
+#include <libconfig.h++>
+#include <memory>
+#include <string>
+#include <unordered_map>
+
+namespace tpik {
+class ActionManager;
+}
+namespace ulisse {
+namespace states {
+class GenericState;
+}
+}
 
 bool ConfigureTasksFromFile(std::unordered_map<std::string, ulisse::TasksInfo>& tasksMap, libconfig::Config& confObj);
 bool ConfigurePriorityLevelsFromFile(std::shared_ptr<tpik::ActionManager> actionManager, std::unordered_map<std::string, ulisse::TasksInfo>& tasksMap, libconfig::Config& confObj);

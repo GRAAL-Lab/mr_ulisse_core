@@ -7,6 +7,11 @@
 #include "std_msgs/msg/bool.hpp"
 #include <ulisse_ctrl/path_manager.hpp>
 
+namespace ikcl {
+class AlignToTarget;
+class CartesianDistance;
+}
+
 namespace ulisse {
 
 namespace states {

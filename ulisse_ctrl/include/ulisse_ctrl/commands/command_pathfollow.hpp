@@ -2,9 +2,12 @@
 #define ULISSE_CTRL_COMMANDPATHFOLLOW_HPP
 
 #include "ulisse_ctrl/commands/generic_command.hpp"
-#include "ulisse_ctrl/states/state_pathfollow.hpp"
 
 namespace ulisse {
+
+namespace states {
+class StatePathFollow;
+}
 
 namespace commands {
 
