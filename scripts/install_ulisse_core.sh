@@ -7,8 +7,8 @@ ROS_VERSION='jazzy'
 
 # Load ROS 2 Jazzy if it is not already in PATH.
 if ! command -v ros2 >/dev/null 2>&1; then
-    if [ -r /opt/ros/{ROS_VERSION}/setup.sh ]; then
-        . /opt/ros/{ROS_VERSION}/setup.sh || exit 1
+    if [ -r /opt/ros/${ROS_VERSION}/setup.sh ]; then
+        . /opt/ros/${ROS_VERSION}/setup.sh || exit 1
     fi
 fi
 
@@ -75,6 +75,6 @@ else
 fi
 
 cd ~/ulisse_ws
-source /opt/ros/{ROS_VERSION}/setup.bash
+source /opt/ros/${ROS_VERSION}/setup.bash
 colcon build --symlink-install --executor sequential
 

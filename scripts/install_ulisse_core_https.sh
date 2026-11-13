@@ -1,5 +1,6 @@
 #!/bin/bash
-# Same as install_ulisse_core.sh, but clones the repos over HTTPS (no SSH keys needed).
+# Install the repositories over HTTPS without requiring SSH keys.
+set -e
 GRN='\033[1;32m'
 RED='\033[1;31m'
 NC='\033[0m' # No Color
@@ -29,20 +30,22 @@ fi
 
 cd graal_ws
 
-if ! [ -d "graal_ws/graal_utils" ]; then
+if ! [ -d "graal_utils" ]; then
 	echo -e "Cloning graal_utils repo..."
 	git clone https://github.com/GRAAL-Lab/graal_utils.git
 fi
 
-if ! [ -d "graal_ws/graal_utils/install_update_graal_libs.sh" ]; then
-	cd ~/graal_ws/graal_utils/scripts
-	echo -e "${GRN}Installing deps from graal_ws/graal_utils${NC}."
-	./install_update_graal_libs.sh
-else
-	echo -e "${RED}Errors cloning graal_utils, exiting...${NC}"
-	exit
+if ! [ -f "graal_utils/scripts/install_update_graal_libs.sh" ]; then
+	echo -e "${RED}Error: graal_utils dependency installer not found.${NC}" >&2
+	exit 1
 fi
 
+echo -e "${GRN}Installing deps from graal_ws/graal_utils${NC}."
+# The dependency installer may use GitHub SSH URLs, including for existing remotes.
+GIT_CONFIG_COUNT=1 \
+GIT_CONFIG_KEY_0="url.https://github.com/.insteadOf" \
+GIT_CONFIG_VALUE_0="git@github.com:" \
+	bash -e graal_utils/scripts/install_update_graal_libs.sh
 
 # Create "ulisse_ws" folder if not existing
 cd ~
@@ -54,11 +57,11 @@ fi
 
 cd ulisse_ws/src
 
-if ! [ -d "ulisse_core" ]; then
-    echo -e "Cloning ulisse_core repo..."
-    git clone https://github.com/GRAAL-Lab/ulisse_core.git
+if ! [ -d "mr_ulisse_core" ]; then
+    echo -e "Cloning mr_ulisse_core repo..."
+    git clone https://github.com/GRAAL-Lab/mr_ulisse_core.git
 else
-	echo -e "${GRN}Found ulisse_core repo${NC}"
+	echo -e "${GRN}Found mr_ulisse_core repo${NC}"
 fi
 
 if ! [ -d "marine_vehicle_models" ]; then
