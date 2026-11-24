@@ -191,12 +191,24 @@ fsm::retval StatePathFollow::Execute()
                 cartesianDistancePathFollowingTask_->ExternalActivationFunction() = 0.0 * Eigen::MatrixXd::Identity(cartesianDistancePathFollowingTask_->TaskSpace(), cartesianDistancePathFollowingTask_->TaskSpace());
             }
         } else {
+             if (pathManager_.DistanceToEnd() < tolleranceEndingPoint_) {
+
+                if (loopPath_) {
+                    std::cout << "** Restarting Path! **" << std::endl;
+                    pathManager_.RestartPath();
+                } else {
+                    std::cout << "*** MISSION FINISHED! ***" << std::endl;
+                    fsm_->EmitEvent(ulisse::events::names::neargoalposition, ulisse::events::priority::medium);
+                }
+
+            } else {
 
             // TODO: Implement LOS controller for path following
 
             // Student guide: Implement the LOS controller here, using the pathManager_ to get the desired
             // path points and compute the desired heading and velocity.
             // The output will be the desired surge and yaw rate, which should be set in referenceVelocities_.
+            }
         }
     }
 
