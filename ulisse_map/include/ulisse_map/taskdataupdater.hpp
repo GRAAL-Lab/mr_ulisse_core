@@ -57,6 +57,7 @@ class TaskDataUpdater : public QObject, rclcpp::Node {
     rclcpp::Subscription<ulisse_msgs::msg::TaskStatus>::SharedPtr linearVelocityHoldSub_;
     rclcpp::Subscription<ulisse_msgs::msg::TaskStatus>::SharedPtr linearVelocityCurrentEstSub_; //Current
     rclcpp::Subscription<ulisse_msgs::msg::TaskStatus>::SharedPtr linearVelocitySub_;
+    rclcpp::Subscription<ulisse_msgs::msg::TaskStatus>::SharedPtr angularVelocitySub_;
     rclcpp::Subscription<ulisse_msgs::msg::TaskStatus>::SharedPtr safetyBoundariesSub_;
 
 
@@ -76,6 +77,7 @@ class TaskDataUpdater : public QObject, rclcpp::Node {
     void CartesianDistanceCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg);
     void CartesianDistancePathFollowingCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg);
     void LinearVelocityCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg);
+    void AngularVelocityCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg);
     void LinearVelocityHoldCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg);
     void LinearVelocityCurrentEstCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg);
     void SafetyBoundariesCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg);

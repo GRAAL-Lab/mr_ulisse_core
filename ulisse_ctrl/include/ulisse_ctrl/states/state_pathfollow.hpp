@@ -9,7 +9,9 @@
 
 namespace ikcl {
 class AlignToTarget;
+class AngularVelocity;
 class CartesianDistance;
+class LinearVelocity;
 }
 
 namespace ulisse {
@@ -22,7 +24,8 @@ namespace states {
         // Tasks of the state
         std::shared_ptr<ikcl::AlignToTarget> alignToTargetTask_;
         std::shared_ptr<ikcl::CartesianDistance> cartesianDistanceTask_;
-        std::shared_ptr<ikcl::CartesianDistance> cartesianDistancePathFollowingTask_;
+        std::shared_ptr<ikcl::LinearVelocity> linearVelocityTask_;
+        std::shared_ptr<ikcl::AngularVelocity> angularVelocityTask_;
 
         bool isCurveSet_;               // Flag for checking if a curve has been loaded
         bool vehicleOnTrack_;           // Flag for checking is the robot at the path start
@@ -35,11 +38,11 @@ namespace states {
 
         PathManager pathManager_;       // Object to handle the path
 
-        double delta_y_;
-        double y_;
-        double LOS_goalHeading;
-        double LOS_headingError;
-        double yReal_;
+        double delta_y_ = 0.0;
+        double y_ = 0.0;
+        double LOS_goalHeading = 0.0;
+        double LOS_headingError = 0.0;
+        double yReal_ = 0.0;
 
     public:
         StatePathFollow();

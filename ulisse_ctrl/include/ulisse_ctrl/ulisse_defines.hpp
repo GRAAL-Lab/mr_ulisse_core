@@ -15,6 +15,7 @@ const std::string ASV = "Ulisse";
 namespace task {
 
 const std::string asvLinearVelocity = "ASV_Linear_Velocity";
+const std::string asvAngularVelocity = "ASV_Angular_Velocity";
 const std::string asvAngularPosition = "ASV_Angular_Position";
 //const std::string asvAngularPositionILOS = "ASV_Angular_Position_ILOS"; //ILOS
 const std::string asvAngularPositionHold = "ASV_Angular_Position_Hold";

@@ -1,5 +1,6 @@
 #include "ulisse_ctrl/states/state_pathfollow.hpp"
 
+#include <cmath>
 #include <ctrl_toolbox/HelperFunctions.h>
 #include <tpik/ActionManager.h>
 #include "ulisse_ctrl/detail/ikcl_tasks.hpp"
@@ -96,7 +97,8 @@ fsm::retval StatePathFollow::OnEntry()
     cartesianDistanceTask_ = std::dynamic_pointer_cast<ikcl::CartesianDistance>(tasksMap.find(ulisse::task::asvCartesianDistance)->second.task);
     alignToTargetTask_ = std::dynamic_pointer_cast<ikcl::AlignToTarget>(tasksMap.find(ulisse::task::asvAngularPosition)->second.task);
 
-    cartesianDistancePathFollowingTask_ = std::dynamic_pointer_cast<ikcl::CartesianDistance>(tasksMap.find(ulisse::task::asvCartesianDistancePathFollowing)->second.task);
+    linearVelocityTask_ = std::dynamic_pointer_cast<ikcl::LinearVelocity>(tasksMap.find(ulisse::task::asvLinearVelocity)->second.task);
+    angularVelocityTask_ = std::dynamic_pointer_cast<ikcl::AngularVelocity>(tasksMap.find(ulisse::task::asvAngularVelocity)->second.task);
 
     if (actionManager->SetAction(ulisse::action::pathfollow, true)) {
         return fsm::ok;
@@ -156,10 +158,14 @@ fsm::retval StatePathFollow::Execute()
     if (isCurveSet_) {
         //Going to the starting point
         if (!vehicleOnTrack_) {
+            linearVelocityTask_->ExternalActivationFunction().setZero();
+            angularVelocityTask_->ExternalActivationFunction().setZero();
 
             ctb::DistanceAndAzimuthRad(ctrlData->inertialF_linearPosition, pathManager_.StartingPoint(), goalDistance, goalHeading);
 
             if (goalDistance < tolleranceStartingPoint_) {
+                cartesianDistanceTask_->ExternalActivationFunction().setZero();
+                alignToTargetTask_->ExternalActivationFunction().setZero();
                 vehicleOnTrack_ = true;
                 std::cout << "*** STARTING TRACK ***" << std::endl;
             } else {
@@ -187,8 +193,6 @@ fsm::retval StatePathFollow::Execute()
                 cartesianDistanceTask_->TaskParameter().gain = taskGain * cartesianDistanceTask_->TaskParameter().conf_gain;
                 cartesianDistanceTask_->ExternalActivationFunction() = Eigen::MatrixXd::Identity(cartesianDistanceTask_->TaskSpace(), cartesianDistanceTask_->TaskSpace());
                 alignToTargetTask_->ExternalActivationFunction() = Eigen::MatrixXd::Identity(alignToTargetTask_->TaskSpace(), alignToTargetTask_->TaskSpace());
-
-                cartesianDistancePathFollowingTask_->ExternalActivationFunction() = 0.0 * Eigen::MatrixXd::Identity(cartesianDistancePathFollowingTask_->TaskSpace(), cartesianDistancePathFollowingTask_->TaskSpace());
             }
         } else {
              if (pathManager_.DistanceToEnd() < tolleranceEndingPoint_) {
@@ -202,12 +206,17 @@ fsm::retval StatePathFollow::Execute()
                 }
 
             } else {
+                cartesianDistanceTask_->ExternalActivationFunction().setZero();
+                alignToTargetTask_->ExternalActivationFunction().setZero();
+                
+                // TODO (laboratory): Use ComputeGoalPosition to get the look-ahead target.
+                // Compute the LOS heading error in local NED and send body-frame surge and yaw
+                // rate references to the two velocity tasks. Activate them for path following.
 
-            // TODO: Implement LOS controller for path following
 
-            // Student guide: Implement the LOS controller here, using the pathManager_ to get the desired
-            // path points and compute the desired heading and velocity.
-            // The output will be the desired surge and yaw rate, which should be set in referenceVelocities_.
+                linearVelocityTask_->ExternalActivationFunction().setIdentity();
+                angularVelocityTask_->ExternalActivationFunction().setIdentity();
+                
             }
         }
     }

@@ -48,6 +48,7 @@
 namespace ikcl {
 class AbsoluteAxisAlignment;
 class AlignToTarget;
+class AngularVelocity;
 class CartesianDistance;
 class LinearVelocity;
 class SafetyBoundaries;
@@ -134,6 +135,7 @@ class VehicleController : public rclcpp::Node {
 
        ///TASKS
     std::shared_ptr<ikcl::LinearVelocity> asvLinearVelocity_;
+    std::shared_ptr<ikcl::AngularVelocity> asvAngularVelocity_;
     std::shared_ptr<ikcl::LinearVelocity> asvLinearVelocityHold_;
     std::shared_ptr<ikcl::AlignToTarget> asvAngularPosition_;
     std::shared_ptr<ikcl::AlignToTarget> asvAngularPositionILOS_;

@@ -5,6 +5,7 @@
 // controller behind one guard so they can also be included in unity builds.
 #include <ikcl/AbsoluteAxisAlignment.h>
 #include <ikcl/AlignToTarget.h>
+#include <ikcl/AngularVelocity.h>
 #include <ikcl/CartesianDistance.h>
 #include <ikcl/LinearVelocity.h>
 

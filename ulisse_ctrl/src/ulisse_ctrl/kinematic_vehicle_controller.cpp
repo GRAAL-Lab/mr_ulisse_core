@@ -100,6 +100,11 @@ VehicleController::VehicleController(std::string conf_filename)
     taskInfo_.taskPub = this->create_publisher<ulisse_msgs::msg::TaskStatus>(ulisse_msgs::topicnames::task_linear_velocity, 1);
     tasksMap_.insert(std::make_pair(ulisse::task::asvLinearVelocity, taskInfo_));
 
+    asvAngularVelocity_ = std::make_shared<ikcl::AngularVelocity>(ulisse::task::asvAngularVelocity, robotModel_, ulisse::robotModelID::ASV);
+    taskInfo_.task = asvAngularVelocity_;
+    taskInfo_.taskPub = this->create_publisher<ulisse_msgs::msg::TaskStatus>(ulisse_msgs::topicnames::task_angular_velocity, 1);
+    tasksMap_.insert(std::make_pair(ulisse::task::asvAngularVelocity, taskInfo_));
+
     // AUV CONTROL ANGULAR POSITION
     asvAngularPosition_ = std::make_shared<ikcl::AlignToTarget>(ikcl::AlignToTarget(ulisse::task::asvAngularPosition, robotModel_, ulisse::robotModelID::ASV));
     taskInfo_.task = asvAngularPosition_;

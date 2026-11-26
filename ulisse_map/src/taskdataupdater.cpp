@@ -89,6 +89,7 @@ void TaskDataUpdater::Init(QQmlApplicationEngine* engine)
     tasksMessageMap_.insert( { ulisse::task::asvCartesianDistance, ulisse_msgs::msg::TaskStatus()});
     tasksMessageMap_.insert( { ulisse::task::asvCartesianDistancePathFollowing, ulisse_msgs::msg::TaskStatus()});
     tasksMessageMap_.insert( { ulisse::task::asvLinearVelocity, ulisse_msgs::msg::TaskStatus()});
+    tasksMessageMap_.insert( { ulisse::task::asvAngularVelocity, ulisse_msgs::msg::TaskStatus()});
     tasksMessageMap_.insert( { ulisse::task::asvLinearVelocityHold, ulisse_msgs::msg::TaskStatus()});
     tasksMessageMap_.insert( { ulisse::task::asvLinearVelocityCurrentEst, ulisse_msgs::msg::TaskStatus()});//Current
     tasksMessageMap_.insert( { ulisse::task::asvSafetyBoundaries, ulisse_msgs::msg::TaskStatus()});
@@ -140,6 +141,9 @@ void TaskDataUpdater::RegisterSubscribers(){
     linearVelocitySub_ = this->create_subscription<ulisse_msgs::msg::TaskStatus>(ulisse_msgs::topicnames::task_linear_velocity, 10,
                                                                                  std::bind(&TaskDataUpdater::LinearVelocityCB, this, _1));
 
+    angularVelocitySub_ = this->create_subscription<ulisse_msgs::msg::TaskStatus>(ulisse_msgs::topicnames::task_angular_velocity, 10,
+        std::bind(&TaskDataUpdater::AngularVelocityCB, this, _1));
+
     linearVelocityHoldSub_ = this->create_subscription<ulisse_msgs::msg::TaskStatus>(ulisse_msgs::topicnames::task_linear_velocity_hold, 10,
                                                                                      std::bind(&TaskDataUpdater::LinearVelocityHoldCB, this, _1));
 
@@ -167,6 +171,7 @@ void TaskDataUpdater::resetPublishersAndSubscribers()
     linearVelocityHoldSub_            .reset();
     linearVelocityCurrentEstSub_      .reset(); // Current
     linearVelocitySub_                .reset();
+    angularVelocitySub_               .reset();
     safetyBoundariesSub_              .reset();
 
     RegisterSubscribers();
@@ -234,6 +239,11 @@ void TaskDataUpdater::CartesianDistancePathFollowingCB(const ulisse_msgs::msg::T
 void TaskDataUpdater::LinearVelocityCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg)
 {
     tasksMessageMap_.at(ulisse::task::asvLinearVelocity) = *msg;
+}
+
+void TaskDataUpdater::AngularVelocityCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg)
+{
+    tasksMessageMap_.at(ulisse::task::asvAngularVelocity) = *msg;
 }
 
 void TaskDataUpdater::LinearVelocityHoldCB(const ulisse_msgs::msg::TaskStatus::SharedPtr msg)
